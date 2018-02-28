@@ -1,0 +1,24 @@
+<% include ../partials/header.ejs %>
+
+<h1 class="card-header"> Restaurant Registration</h1>
+
+<div class="container">
+    <form action="/restaurants" method="POST">
+        <div class=" form-group">
+            <label for name>Restaurant Name</label>
+            <input name="name" type="text" class="form-control" placeholder="Enter Restaurant Name">
+        </div>
+        <div class=" form-group">
+            <label for location>Location</label>
+            <input name="location" type="text" class="form-control" placeholder="Enter Restaurant Location">
+        </div>
+        <div class=" form-group">
+            <label for phone>Phone Number</label>
+            <input name="phone" type="text" class="form-control" placeholder="Enter Phone Number">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<% include ../partials/footer.ejs %>

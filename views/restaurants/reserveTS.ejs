@@ -1,0 +1,16 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <h2>Select Time Slot</h2><br>
+    <form action="/restaurants/1/reserveTable" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Breakfast ( 7:00 am - 9:00 am )</button>
+    </form><form action="/restaurants/2/reserveTable" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Lunch ( 12:00 pm - 2:00 pm )</button>
+    </form><form action="/restaurants/3/reserveTable" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Dinner ( 8:00 pm - 10:00 pm )</button>
+    </form>
+
+</div>
+<%include ../partials/footer.ejs%>

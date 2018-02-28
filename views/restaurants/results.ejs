@@ -1,0 +1,56 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <% var output = [];
+
+    if(results.length>0){
+        var object = {
+            ID: results[0].ID,
+            name: results[0].name,
+            location: results[0].location,
+            phone: results[0].phone,
+            rating: results[0].rating,
+
+        };
+
+        var j = 0;
+
+        output.push(object);
+
+        for(var i=1; i<results.length; i++){
+            object = {
+                ID: results[i].ID,
+                name: results[i].name,
+                location: results[i].location,
+                phone: results[i].phone,
+                rating: results[i].rating,
+
+            };
+            output.push(object);
+        }
+
+    } else{
+
+    } %>
+
+    <h1>Search Results</h1>
+
+    <% output.forEach(function(element){ %>
+    <p>
+        ID : <%= element.ID %>
+    Name: <%= element.name %>
+    Location: <%= element.location %>
+    Contact Info: <%= element.phone %>
+    Rating: <%= element.rating %>
+    <form action="/restaurants/<%= element.ID %>/reserveTS" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Reserve</button>
+    </form>
+    </p>
+
+    <hr>
+    <% }); %>
+
+</div>
+<%include ../partials/footer.ejs%>

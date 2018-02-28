@@ -1,0 +1,25 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <h2>Search Results</h2>
+
+    <%
+    var ATS = results[0].Available_time_slots;
+    var ATS2 = ATS.split("/");
+    var  required_ATS = ATS2[parseInt(time_slot)-1];
+    var required_ATS2 = required_ATS.split(",");
+    for (var i=0;i<required_ATS2.length;i++){ %>
+        <p>
+            Room_table: <%= required_ATS2[i] %>
+    <form action="/restaurants/<%= required_ATS2[i] %>/final_reserve" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Reserve Table</button>
+    </form>
+
+    </p>
+
+<%    } %>
+
+</div>
+<%include ../partials/footer.ejs%>

@@ -1,0 +1,15 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+  <h1 id="h1">Book My Table</h1><br>
+  <form action="/restaurants/search" method="post">
+    <button type="submit" name="search" value="" class="btn btn-primary">Make Reservation</button>
+  </form>
+  <!--<button><a href="/restaurants/search" class="btn btn-primary">Make Reservations</a></button><br><br>-->
+  <form action="/customers/reservations_made" method="post">
+    <button type="submit" name="search" value="" class="btn btn-primary">Reservations made</button>
+  </form>
+    <button><a href="/restaurants/register" class="btn btn-primary">Edit Profile Details</a></button><br><br>
+
+</div>
+<%include ../partials/footer.ejs%>

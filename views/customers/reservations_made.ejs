@@ -1,0 +1,22 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <h2>Search Results</h2>
+
+    <%
+    var RM = results[0].reservation;
+    var RM2 = RM.split("/");
+
+//    var  required_ATS = ATS2[parseInt(time_slot)-1];
+//    var required_ATS = ATS.split(",");
+    for (var i=1;i<RM2.length;i++){ %>
+    <p>
+        Restaurant_ID , Time Slot , Table Number: <%= RM2[i] %>
+    </p>
+
+    <%    } %>
+
+</div>
+<%include ../partials/footer.ejs%>
