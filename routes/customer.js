@@ -31,20 +31,7 @@ router.post("/", function(req, res){
     });
 });
 
-router.get("/buses/:id/edit", function(req, res){
-    var Licence = req.params.id;
 
-    var sql1 = "SELECT * FROM customers WHERE Licence=\"" + Licence + "\";";
-    // var sql2 = "SELECT * FROM route_stop WHERE Licence=\"" + Licence + "\";";
-
-    db.query(sql1, function(error, buses){
-        if(error){
-            console.log(error);
-        } else{
-            res.render("customers/edit", {bus: buses[0]});
-        }
-    });
-});
 
 router.post("/reservations_made",function (req,res){
     var email = req.session.email;

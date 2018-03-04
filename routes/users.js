@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const sqlcon = require('./../config/database');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const sqlcon = require('./../config/database');
+
 
 /* GET home page. */
 router.get('/register', function(req, res, next) {
@@ -29,17 +31,44 @@ router.post("/", function(req, res){
     });
 });
 
-router.get("/buses/:id/edit", function(req, res){
-    var Licence = req.params.id;
+router.post("/:id/addWaiter", function(req, res, next) {
+    req.session.restaurant_id=req.params.id;
+    res.render("restaurant_owners/registerW", { title: 'Express' });
+});
 
-    var sql1 = "SELECT * FROM admin WHERE Licence=\"" + Licence + "\";";
-    // var sql2 = "SELECT * FROM route_stop WHERE Licence=\"" + Licence + "\";";
+router.post("/registerW", function(req, res){
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var mobile=req.body.mobile;
 
-    db.query(sql1, function(error, buses){
+
+    var sql = "INSERT INTO waiters(firstName, lastName, email,contactInfo,PASSWORD,restaurantList) " +
+        "VALUES(\"" + firstName + "\", \"" + lastName + "\", \"" + email + "\",\""+mobile+"\",\""+"bookyMyTable123"+"\",\""+""+"\");";
+
+    sqlcon.db.query(sql, function(error, result){
         if(error){
             console.log(error);
         } else{
-            res.render("admins/edit", {bus: buses[0]});
+            console.log("Added waiter to the database");
+        }
+        res.redirect("/restaurant_owners");
+    });
+});
+
+
+
+router.post("/search",function (req,res) {
+    var ownerID=req.session.ownerID;
+    var userType=req.session.userType;
+    console.log("OwnerID: "+ownerID);
+    var sql = "SELECT * FROM restaurants WHERE owner_ID=\""+ownerID+"\";";
+
+    sqlcon.db.query(sql,function(error,results){
+        if(error){
+            console.log(error);
+        }else {
+            res.render("restaurants/results",{results:results,userType:userType});
         }
     });
 });
@@ -49,19 +78,16 @@ router.post("/loginValidation", function(req, res){
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var ps=req.body.password;
-    // console.log("Hello"+userType);
 
-    //STOPPED HERE 1/21/2018-11.13PM
-    //SELECT password FROM admin WHERE firstName=
-    //STOPPED HERE on 1/25/2018-8.13 pm -
 
-    var sql1 = "SELECT password FROM "+ userType+" WHERE firstName=\'" + firstName + "\' AND lastName=\'"+lastName+"\';";
+    var sql1 = "SELECT *  FROM "+ userType+" WHERE email=\'" + firstName + "\' AND lastName=\'"+lastName+"\';";
     // var sql2 = "SELECT * FROM route_stop WHERE Licence=\"" + Licence + "\";";
     // console.log("here");
     sqlcon.db.query(sql1, function(error, password){
         if(error){
             console.log(error);
         } else if((password[0].password)== ps ){
+            req.session.ownerID=password[0]
             console.log("Password is correct");
             // res.render("buses/edit", {admin: password[0]});
             res.redirect("/admin");

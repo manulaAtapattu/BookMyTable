@@ -5,6 +5,7 @@
 
     <% var output = [];
 
+
     if(results.length>0){
         var object = {
             ID: results[0].ID,
@@ -44,9 +45,17 @@
     Location: <%= element.location %>
     Contact Info: <%= element.phone %>
     Rating: <%= element.rating %>
+
+<% if (userType=="customers"){%>
     <form action="/restaurants/<%= element.ID %>/reserveTS" method="post">
         <button type="submit" name="search" value="" class="btn btn-primary">Reserve</button>
     </form>
+    <%}%>
+    <% if (userType=="restaurant_owners"){%>
+    <form action="/restaurant_owners/<%= element.ID %>/addWaiter" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Add waiter</button>
+    </form>
+    <%}%>
     </p>
 
     <hr>

@@ -1,15 +1,22 @@
 var express = require('express');
 var router = express.Router();
+const sqlcon = require('./../config/database');
+
 
 /* GET home page. */
-router.get('/register', function(req, res, next) {
-    res.render('admins/register', { title: 'Express' });
+router.get('/registerRO', function(req, res, next) {
+    res.render('admins/registerRO', { title: 'Express' });
 });
+
+router.get('/registerAdmin', function(req, res, next) {
+    res.render('admins/registerAdmin', { title: 'Express' });
+});
+
 router.get('/', function(req, res, next) {
     res.render('admins/index', { title: 'Express' });
 });
 
-router.post("/", function(req, res){
+router.post("/registerAdmin", function(req, res){
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var email = req.body.email;
@@ -29,20 +36,26 @@ router.post("/", function(req, res){
     });
 });
 
-router.get("/buses/:id/edit", function(req, res){
-    var Licence = req.params.id;
+router.post("/registerRO", function(req, res){
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var mobile=req.body.mobile;
 
-    var sql1 = "SELECT * FROM admin WHERE Licence=\"" + Licence + "\";";
-    // var sql2 = "SELECT * FROM route_stop WHERE Licence=\"" + Licence + "\";";
 
-    db.query(sql1, function(error, buses){
+    var sql = "INSERT INTO restaurant_owners(firstName, lastName, email,contactInfo,PASSWORD,restaurantList) " +
+        "VALUES(\"" + firstName + "\", \"" + lastName + "\", \"" + email + "\",\""+mobile+"\",\""+"bookyMyTable123"+"\",\""+""+"\");";
+
+    sqlcon.db.query(sql, function(error, result){
         if(error){
             console.log(error);
         } else{
-            res.render("admins/edit", {bus: buses[0]});
+            console.log("Added Restaurant Owner to the database");
         }
+        res.redirect("/admin");
     });
 });
+
 
 router.post("/loginValidation", function(req, res){
     var userType = req.body.userType;
