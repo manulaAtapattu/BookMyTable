@@ -2,14 +2,15 @@
 
 <div class="container">
   <h1 id="h1">Book My Table</h1><br>
-  <form action="/restaurants/register" method="post">
-    <button type="submit" name="register" value="" class="btn btn-primary">Add Restaurant</button>
-  </form>
+  <button><a href="/restaurants/register" class="btn btn-primary">Add Restaurant</a></button><br><br>
   <form action="/restaurant_owners/search" method="post">
     <button type="submit" name="search" value="" class="btn btn-primary">Add Waiter</button>
   </form>
-  <button><a href="/customers/edit.ejs" class="btn btn-primary">Edit Restaurant details</a></button><br><br>
-  <button><a href="/restaurants/register" class="btn btn-primary">Edit Profile Details</a></button><br><br>
-
+  <form action="/restaurant_owners/search" method="post">
+    <button type="submit" name="search" value="" class="btn btn-primary">Edit Restaurant details</button>
+  </form>
+  <form action="/editProfile" method="post">
+    <button type="submit" name="search" value="" class="btn btn-primary">Edit profile details</button>
+  </form>
 </div>
 <%include ../partials/footer.ejs%>

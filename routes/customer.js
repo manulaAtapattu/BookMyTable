@@ -31,7 +31,31 @@ router.post("/", function(req, res){
     });
 });
 
+router.post("/search",function (req,res) {
+    var sql = "SELECT * FROM customers;";
 
+    sqlcon.db.query(sql,function(error,results){
+        if(error){
+            console.log(error);
+        }else {
+            res.render("customers/results",{results:results});
+        }
+    });
+});
+
+router.post("/:id/remove",function (req,res) {
+    var ID = req.params.id;
+    var sql1 = "DELETE FROM customers WHERE ID=\""+ID+"\";";
+
+    sqlcon.db.query(sql1, function(error, result){
+        if(error){
+            console.log(error);
+        } else{
+            console.log("Customer successfully removed");
+            res.render("customers");
+        }
+    });
+});
 
 router.post("/reservations_made",function (req,res){
     var email = req.session.email;

@@ -31,6 +31,21 @@ router.post("/", function(req, res){
     });
 });
 
+router.post("/:id/editRestaurant",function (req,res) {
+    var restaurantID=req.params.id;
+    req.session.restaurant_id=restaurantID;
+
+    var sql = "SELECT * FROM restaurants WHERE ID=\""+restaurantID+"\";";
+
+    sqlcon.db.query(sql,function(error,results){
+        if(error){
+            console.log(error);
+        }else {
+            res.render("restaurants/edit",{results:results});
+        }
+    });
+});
+
 router.post("/:id/addWaiter", function(req, res, next) {
     req.session.restaurant_id=req.params.id;
     res.render("restaurant_owners/registerW", { title: 'Express' });
@@ -43,7 +58,7 @@ router.post("/registerW", function(req, res){
     var mobile=req.body.mobile;
 
 
-    var sql = "INSERT INTO waiters(firstName, lastName, email,contactInfo,PASSWORD,restaurantList) " +
+    var sql = "INSERT INTO waiters(firstName, lastName, email,mobile,PASSWORD,restaurantList) " +
         "VALUES(\"" + firstName + "\", \"" + lastName + "\", \"" + email + "\",\""+mobile+"\",\""+"bookyMyTable123"+"\",\""+""+"\");";
 
     sqlcon.db.query(sql, function(error, result){
@@ -55,7 +70,6 @@ router.post("/registerW", function(req, res){
         res.redirect("/restaurant_owners");
     });
 });
-
 
 
 router.post("/search",function (req,res) {

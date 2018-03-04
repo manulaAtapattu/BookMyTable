@@ -2,10 +2,13 @@
 
 <div class="container">
   <h1 id="h1">Book My Table</h1><br>
-  <!--<button><a href="/customers/register" class="btn btn-primary">Register Customers</a></button><br>-->
-  <button><a href="/customers/edit.ejs" class="btn btn-primary">Remove Customers</a></button><br><br>
+  <form action="/customers/search" method="post">
+    <button type="submit" name="search" value="" class="btn btn-primary">Remove Customers</button>
+  </form>
   <button><a href="/admin/registerRO" class="btn btn-primary">Register Restaurant Owners</a></button><br><br>
-  <button><a href="/admin/edit" class="btn btn-primary">Edit profile details</a></button><br><br>
+  <form action="/editProfile" method="post">
+    <button type="submit" name="search" value="" class="btn btn-primary">Edit profile details</button>
+  </form>
   <button><a href="/admin/registerAdmin" class="btn btn-primary">Add Administrator</a></button><br><br>
 
 </div>

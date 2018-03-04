@@ -1,0 +1,62 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+    <h2>Customers</h2>
+
+    <% var output = [];
+
+
+    if(results.length>0){
+        var object = {
+            ID: results[0].ID,
+            firstName: results[0].firstName,
+            lastName: results[0].lastName,
+            email:results[0].email,
+            mobile: results[0].mobile,
+            reservation: results[0].reservation,
+
+        };
+
+        var j = 0;
+
+        output.push(object);
+
+        for(var i=1; i<results.length; i++){
+            object = {
+                ID: results[i].ID,
+                firstName: results[i].firstName,
+                lastName: results[i].lastName,
+                email:results[i].email,
+                mobile: results[i].mobile,
+                reservation: results[i].reservation,
+
+            };
+            output.push(object);
+        }
+
+    } else{
+
+    } %>
+
+    <h1>Search Results</h1>
+
+    <% output.forEach(function(element){ %>
+    <p>
+        ID : <%= element.ID %>
+        First Name: <%= element.firstName %>
+        Last Name: <%= element.lastName %>
+        Email: <%= element.email %>
+        Contact Info.: <%= element.mobile %>
+        Reservations made: <%= element.reservation %>
+
+    <form action="/customers/<%= element.ID %>/remove" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Remove</button>
+    </form>
+    </p>
+
+    <hr>
+    <% }); %>
+
+</div>
+<%include ../partials/footer.ejs%>

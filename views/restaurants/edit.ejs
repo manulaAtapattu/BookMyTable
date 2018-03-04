@@ -1,0 +1,63 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+    <h2>Customers</h2>
+
+    <% var output = [];
+
+
+    if(results.length>0){
+        var object = {
+            ID: results[0].ID,
+            name: results[0].name,
+            location: results[0].location,
+            phone: results[0].phone,
+            rating: results[0].rating,
+
+        };
+
+        var j = 0;
+
+        output.push(object);
+
+        for(var i=1; i<results.length; i++){
+            object = {
+                ID: results[i].ID,
+                name: results[i].name,
+                location: results[i].location,
+                phone: results[i].phone,
+                rating: results[i].rating,
+
+            };
+            output.push(object);
+        }
+
+    } else{
+
+    } %>
+
+
+    <% output.forEach(function(element){ %>
+
+    <form action="/restaurants/update" method="POST">
+        <p>
+            Name of Restaurant:<br>
+            <input name="name" type="text" class="form-control" placeholder="Enter new First Name" value="<%= element.name %>"><br>
+
+            Location:<br>
+            <input name="location" type="text" class="form-control" placeholder="Enter new Email" value="<%= element.location %>"><br>
+            Contact Information: <br>
+            <input name="phone" type="text" class="form-control" placeholder="Enter new mobile" value="<%= element.phone %>"><br>
+
+            <button type="submit" name="search" value="" class="btn btn-primary">Update details</button>
+        </p>
+    </form>
+
+
+
+    <hr>
+    <% }); %>
+
+</div>
+<%include ../partials/footer.ejs%>

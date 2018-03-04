@@ -1,0 +1,68 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <h2>Edit your Profile</h2>
+    <% var output = [];
+
+
+    if(results.length>0){
+        var object = {
+            ID: results[0].ID,
+            firstName: results[0].firstName,
+            lastName: results[0].lastName,
+            email:results[0].email,
+            mobile: results[0].mobile,
+            password: results[0].PASSWORD,
+
+        };
+
+        var j = 0;
+
+        output.push(object);
+
+        for(var i=1; i<results.length; i++){
+            object = {
+                ID: results[i].ID,
+                firstName: results[i].firstName,
+                lastName: results[i].lastName,
+                email:results[i].email,
+                mobile: results[i].mobile,
+                password: results[i].PASSWORD,
+
+            };
+            output.push(object);
+        }
+
+    } else{
+
+    } %>
+
+
+    <% output.forEach(function(element){ %>
+
+    <form action="/updateProfile" method="POST">
+        <p>
+    First Name:<br>
+        <input name="firstName" type="text" class="form-control" placeholder="Enter new First Name" value="<%= element.firstName %>"><br>
+        Last Name:<br>
+        <input name="lastName" type="text" class="form-control" placeholder="Enter new Last Name" value="<%= element.lastName %>"><br>
+        Email:<br>
+        <input name="email" type="text" class="form-control" placeholder="Enter new Email" value="<%= element.email %>"><br>
+        Contact Information: <br>
+        <input name="mobile" type="text" class="form-control" placeholder="Enter new mobile" value="<%= element.mobile %>"><br>
+        Password :<br>
+        <input name="password" type="text" class="form-control" placeholder="Enter  new Password" value="<%= element.password %>"><br>
+
+        <button type="submit" name="search" value="" class="btn btn-primary">Update details</button>
+        </p>
+    </form>
+
+
+
+    <hr>
+    <% }); %>
+
+</div>
+<%include ../partials/footer.ejs%>

@@ -7,15 +7,17 @@ router.get('/register', function(req, res, next) {
     res.render('restaurants/register', { title: 'Express' });
 });
 
-router.post("/", function(req, res){
+router.post("/register", function(req, res){
     var name = req.body.name;
     var location = req.body.location;
     var phone = req.body.phone;
     // var rating=req.body.rating;
     var rating=null;
+    var rating=0;
+    var ownerID=req.session.ownerID;
 
     var sql = "INSERT INTO restaurants(name, location, phone,rating,owner_ID) " +
-        "VALUES(\"" + name + "\", \"" + location + "\", \"" + phone + "\",\""+rating+"\",\"1\");";
+        "VALUES(\"" + name + "\", \"" + location + "\", \"" + phone + "\",\""+rating+"\",\""+ownerID+"\");";
 
     sqlcon.db.query(sql, function(error, result){
         if(error){
@@ -35,6 +37,26 @@ router.post("/search",function (req,res) {
             console.log(error);
         }else {
             res.render("restaurants/results",{results:results});
+        }
+    });
+});
+
+router.post("/update",function (req,res) {
+    var name = req.body.name;
+    var location = req.body.location;
+    var phone = req.body.phone;
+
+    var ID=req.session.ownerID;
+    var userType=req.session.userType;
+    var restaurantID=req.session.restaurant_id;
+
+    var sql = "UPDATE  restaurants SET name = \""+name+"\",location = \""+location+"\",phone = \""+phone+"\" WHERE ID=\""+restaurantID+"\";";
+
+    sqlcon.db.query(sql,function(error,results){
+        if(error){
+            console.log(error);
+        }else {
+            res.render("restaurant_owners");
         }
     });
 });
@@ -134,15 +156,7 @@ router.post("/:id/final_reserve", function(req, res, next) {
             console.log("updated Reserved")
         }
     });
-    // var sql3 = "SELECT reservation FROM customers WHERE email=\""+email+"\";";
-    // sqlcon.db.query(sql3, function(error, result){
-    //     if(error){
-    //         console.log(error);
-    //     } else{
-    //         req.session.reservation_made=result;
-    //         console.log("here"+result);
-    //     }
-    //     });
+
     var RM=req.session.reservations;
     var record = ID+","+TS+","+room_table;
     console.log("RM:"+RM);
