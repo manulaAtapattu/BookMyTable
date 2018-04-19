@@ -40,6 +40,7 @@ router.post("/updateProfile",function (req,res) {
             console.log(error);
         }else {
             if (userType=="admin"){userType+="s"}
+            console.log("profile successfully updated")
             res.render(userType);
         }
     });

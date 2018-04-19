@@ -1,0 +1,31 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <h2>Edit your Profile</h2>
+
+
+    <form action="/updateProfile" method="POST">
+        <p>
+            First Name:<br>
+            <input name="firstName" type="text" class="form-control" placeholder="Enter new First Name" value="<%= firstName %>"><br>
+            Last Name:<br>
+            <input name="lastName" type="text" class="form-control" placeholder="Enter new Last Name" value="<%= lastName %>"><br>
+            Email:<br>
+            <input name="email" type="text" class="form-control" placeholder="Enter new Email" value="<%= email %>"><br>
+            Contact Information: <br>
+            <input name="mobile" type="text" class="form-control" placeholder="Enter new mobile" value="<%= mobile %>"><br>
+            Password :<br>
+            <input name="password" type="text" class="form-control" placeholder="Enter  new Password" value="<%= PASSWORD %>"><br>
+
+            <button type="submit" name="search" value="" class="btn btn-primary">Update details</button>
+        </p>
+    </form>
+
+
+
+    <hr>
+
+</div>
+<%include ../partials/footer.ejs%>

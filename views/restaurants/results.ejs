@@ -41,22 +41,25 @@
     <% output.forEach(function(element){ %>
     <p>
         ID : <%= element.ID %>
-    Name: <%= element.name %>
-    Location: <%= element.location %>
-    Contact Info: <%= element.phone %>
-    Rating: <%= element.rating %>
+    Name : <%= element.name %>
+    Location : <%= element.location %>
+    Contact Info : <%= element.phone %><br>
+    Overall Rating, Number of user reviews : <%= element.rating %>
 
 <% if (userType=="customers"){%>
     <form action="/restaurants/<%= element.ID %>/reserveTS" method="post">
-        <button type="submit" name="search" value="" class="btn btn-primary">Reserve</button>
+        <button type="submit" name="search" value="" class="btn btn-secondary">Reserve</button>
+    </form>
+    <form action="/restaurants/<%= element.ID %>/rateRestaurant" method="post">
+        <button type="submit" name="search" value="" class="btn btn-secondary">Rate Restaurant</button>
     </form>
     <%}%>
     <% if (userType=="restaurant_owners"){%>
     <form action="/restaurant_owners/<%= element.ID %>/addWaiter" method="post">
-        <button type="submit" name="search" value="" class="btn btn-primary">Add waiter</button>
+        <button type="submit" name="search" value="" class="btn btn-secondary">Add waiter</button>
     </form>
     <form action="/restaurant_owners/<%= element.ID %>/editRestaurant" method="post">
-        <button type="submit" name="search" value="" class="btn btn-primary">Edit Restaurant Details</button>
+        <button type="submit" name="search" value="" class="btn btn-secondary">Edit Restaurant Details</button>
     </form>
     <%}%>
     </p>

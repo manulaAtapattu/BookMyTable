@@ -8,11 +8,13 @@ var session = require("express-session");
 var methodOverride  = require("method-override");
 var mysql           = require("mysql");
 const sqlcon = require('./config/database');
+const mongo = require('./config/mongodb');
 
 
 
 
-var index = require('./routes/index');
+
+var index = require('./routesMongo/index');
 var users = require('./routes/users');
 var customer=require('./routes/customer');
 var restaurant=require('./routes/restaurant');
@@ -23,7 +25,7 @@ var restaurant_owner=require('./routes/restaurant_owner');
 var app = express();
 
 
-
+//connect to phpMyAdmin
 sqlcon.db.connect(function(err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
@@ -31,6 +33,63 @@ sqlcon.db.connect(function(err) {
     }
     console.log('connected as id ' + sqlcon.db.threadId);
 });
+
+//connect to mlab
+
+const mongoose = require('mongoose');
+let uri = 'mongodb://mratapattu1996:Manula1234@ds115729.mlab.com:15729/bookmytable';
+mongoose.connect(uri);
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+// //connect to mongoose
+// const mongoose = require('mongoose');
+// mongoose.connect(mongo.uri);
+// let db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// console.log("mongoose connected successfully");
+// let songSchema = mongoose.Schema({
+//     decade: String,
+//     artist: String,
+//     song: String,
+//     weeksAtOne: Number
+// });
+//
+// // Store song documents in a collection called "songs"
+// let Song = mongoose.model('songs', songSchema);
+//
+// // Create seed data
+// let seventies = new Song({
+//     decade: '1970s',
+//     artist: 'Debby Boone',
+//     song: 'You Light Up My Life',
+//     weeksAtOne: 10
+// });
+//
+// let eighties = new Song({
+//     decade: '1980s',
+//     artist: 'Olivia Newton-John',
+//     song: 'Physical',
+//     weeksAtOne: 10
+// });
+//
+// let nineties = new Song({
+//     decade: '1990s',
+//     artist: 'Mariah Carey',
+//     song: 'One Sweet Day',
+//     weeksAtOne: 16
+// });
+
+/*
+ * First we'll add a few songs. Nothing is required to create the
+ * songs collection; it is created automatically when we insert.
+ */
+//
+// let list = [seventies, eighties, nineties]
+//
+// Song.insertMany(list);
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
