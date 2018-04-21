@@ -1,0 +1,28 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+    <h2>Customers</h2>
+
+
+    <h1>Search Results</h1>
+
+    <% for(var i=0;i<customers.length;i++){ %>
+    <p>
+        ID : <%= customers[i].ID %>
+        First Name: <%= customers[i].firstName %>
+        Last Name: <%= customers[i].lastName %>
+        <br>
+        Email: <%= customers[i].email %>
+        Contact Info.: <%= customers[i].mobile %>
+        Reservations made: <%= customers[i].reservation %>
+
+    <form action="/customers/<%= customers[i].ID %>/remove" method="post">
+        <button type="submit" name="search" value="" class="btn btn-primary">Remove</button>
+    </form>
+    </p>
+<%}%>
+    <hr>
+
+</div>
+<%include ../partials/footer.ejs%>

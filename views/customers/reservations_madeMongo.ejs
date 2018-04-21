@@ -1,0 +1,19 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <h2>Search Results</h2>
+
+    <%
+    var res=reservations;
+    var res2=res.split("/");
+    for (var i=0;i<res2.length;i++){ %>
+    <p>
+        Restaurant_ID , Time Slot , Table Number : <%= res2[i] %>
+    </p>
+    <%} %>
+
+
+</div>
+<%include ../partials/footer.ejs%>

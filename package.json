@@ -13,6 +13,7 @@
     "express": "~4.15.5",
     "express-session": "^1.15.6",
     "express-validator": "^5.0.1",
+    "firebase": "^4.13.0",
     "method-override": "latest",
     "mongodb": "^3.0.4",
     "mongoose": "^5.0.11",

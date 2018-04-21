@@ -9,21 +9,43 @@ var methodOverride  = require("method-override");
 var mysql           = require("mysql");
 const sqlcon = require('./config/database');
 const mongo = require('./config/mongodb');
-
-
+var firebase = require("firebase");
 
 
 
 var index = require('./routesMongo/index');
 var users = require('./routes/users');
-var customer=require('./routes/customer');
+var customer=require('./routesMongo/customer');
 var restaurant=require('./routes/restaurant');
-var admin=require('./routes/admin');
+var admin=require('./routesMongo/admin');
 var restaurant_owner=require('./routes/restaurant_owner');
 
 
 var app = express();
 
+//FIREBASE CODE
+//Initialize Firebase
+// var config = {
+//     apiKey: "AIzaSyDW1svOcbk8gC2Mj1KI8DyWaOMmJo-jYOQ",
+//     authDomain: "semester5project.firebaseapp.com",
+//     databaseURL: "https://semester5project.firebaseio.com",
+//     storageBucket: "semester5project.appspot.com",
+// };
+// firebase.initializeApp(config);
+//
+// var database = firebase.database();
+// function writeUserData(userId, name, email, imageUrl){
+//     database.ref('users/' + userId).set({
+//         username: name,
+//         email: email,
+//         profile_picture : imageUrl
+//     });
+// }
+//
+// // writeUserData("150050A","Manula","mratapattu@gmail.com","FEK");
+// return firebase.database().ref('/users/150050A').once('value').then(function (snapshot) {
+//     console.log(snapshot.val().username);
+// });
 
 //connect to phpMyAdmin
 sqlcon.db.connect(function(err) {
@@ -36,11 +58,11 @@ sqlcon.db.connect(function(err) {
 
 //connect to mlab
 
-const mongoose = require('mongoose');
-let uri = 'mongodb://mratapattu1996:Manula1234@ds115729.mlab.com:15729/bookmytable';
-mongoose.connect(uri);
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+// const mongoose = require('mongoose');
+// let uri = 'mongodb://mratapattu1996:Manula1234@ds115729.mlab.com:15729/bookmytable';
+// mongoose.connect(uri);
+// let db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
 
 // //connect to mongoose
 // const mongoose = require('mongoose');

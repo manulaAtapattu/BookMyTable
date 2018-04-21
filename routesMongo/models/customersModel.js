@@ -9,4 +9,5 @@ var userSchema = new Schema({
     PASSWORD:String,
     reservation:String
 });
+
 module.exports = mongoose.model('customers', userSchema);
