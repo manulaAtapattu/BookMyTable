@@ -6,19 +6,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require("express-session");
 var methodOverride  = require("method-override");
-var mysql           = require("mysql");
+// var mysql           = require("mysql");
 const sqlcon = require('./config/database');
-const mongo = require('./config/mongodb');
-var firebase = require("firebase");
-
+// const mongo = require('./config/mongodb');
 
 
 var index = require('./routesMongo/index');
 var users = require('./routes/users');
 var customer=require('./routesMongo/customer');
-var restaurant=require('./routes/restaurant');
+var restaurant=require('./routesMongo/restaurant');
 var admin=require('./routesMongo/admin');
-var restaurant_owner=require('./routes/restaurant_owner');
+var restaurant_owner=require('./routesMongo/restaurant_owner');
 
 
 var app = express();
@@ -111,8 +109,6 @@ sqlcon.db.connect(function(err) {
 //
 // Song.insertMany(list);
 
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -136,7 +132,6 @@ app.use('/restaurants', restaurant);
 app.use('/restaurant_owners', restaurant_owner);
 
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -154,8 +149,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 app.listen("3000", function(){
     console.log("Server started...")

@@ -1,7 +1,10 @@
+const mongoose = require('mongoose');
+let uri = 'mongodb://mratapattu1996:Manula1234@ds115729.mlab.com:15729/bookmytable';
+const fb = require('./../config/firebase');
+
 var express = require('express');
 var router = express.Router();
 const sqlcon = require('./../config/database');
-
 
 router.get('/register', function(req, res, next) {
     res.render('restaurants/register', { title: 'Express' });
@@ -12,87 +15,137 @@ router.post("/register", function(req, res){
     var name = req.body.name;
     var location = req.body.location;
     var phone = req.body.phone;
-    // var rating=req.body.rating;
-    var rating="0,0";        // OverallRating,no.of users
+    var roomTable=req.body.roomTable;
+    var tableSize=req.body.tableSize;
+    var rating="0,0";                       // OverallRating,no.of users
     var ownerID=req.session.ownerID;
+    var restaurantNum;
+    var restaurantID;
 
-    var sql = "INSERT INTO restaurants(name, location, phone,rating,owner_ID) " +
-        "VALUES(\"" + name + "\", \"" + location + "\", \"" + phone + "\",\""+rating+"\",\""+ownerID+"\");";
 
-    sqlcon.db.query(sql, function(error, result){
-        if(error){
-            console.log(error);
-        } else{
-            console.log("Added restaurant to the database");
-        }
-        res.render("restaurant_owners");
+    fb.database.ref('Restaurants').once('value').then(function (snapshot) {
+        restaurantNum=snapshot.numChildren();
+        restaurantID=parseInt(restaurantNum)+1;
+        database.ref('Restaurants/'+restaurantID).set({
+            name: name,
+            location: location,
+            ownerID : ownerID,
+            phone:phone,
+            rating:rating,
+            roomTable:roomTable,
+            tableSize:tableSize
+        });
     });
+
+
+        res.render("restaurant_owners");
+
+    // var sql = "INSERT INTO restaurants(name, location, phone,rating,owner_ID) " +
+    //     "VALUES(\"" + name + "\", \"" + location + "\", \"" + phone + "\",\""+rating+"\",\""+ownerID+"\");";
+    //
+    // sqlcon.db.query(sql, function(error, result){
+    //     if(error){
+    //         console.log(error);
+    //     } else{
+    //         console.log("Added restaurant to the database");
+    //     }
+    //     res.render("restaurant_owners");
+    // });
 });
 
 //show all the restaurants in the system
 router.post("/search",function (req,res) {
-    var sql = "SELECT * FROM restaurants;";
+
+
     var userType=req.session.userType;
 
-    sqlcon.db.query(sql,function(error,results){
-        if(error){
-            console.log(error);
-        }else {
-            res.render("restaurants/results",{results:results,userType:userType});
-        }
-    });
+    return fb.database.ref('/Restaurants').once('value').then(function (snapshot) {
+    console.log(snapshot.val());
+    res.render("restaurants/resultsNew",{restaurants:snapshot,userType:userType});
+});
+
+    // var sql = "SELECT * FROM restaurants;";
+    // var userType=req.session.userType;
+    //
+    // sqlcon.db.query(sql,function(error,results){
+    //     if(error){
+    //         console.log(error);
+    //     }else {
+    //         res.render("restaurants/results",{results:results,userType:userType});
+    //     }
+    // });
 });
 
 router.post("/:id/rateRestaurant",function (req,res) {
-    var sql = "SELECT rating FROM restaurants;";
+
     var restaurantID = req.params.id;
     req.session.restaurant_id=restaurantID;
-    var rating;
+    console.log(restaurantID);
 
-    sqlcon.db.query(sql,function(error,results){
-        if(error){
-            console.log(error);
-        }else {
-            rating=results[0].rating;
-            res.render("customers/rateRestaurant",{results:results,rating:rating});
-        }
+    return fb.database.ref('/Restaurants/'+restaurantID).once('value').then(function (snapshot) {
+        console.log(snapshot.val());
+        res.render("customers/rateRestaurantMongo",{results:snapshot});
     });
+
+    // var sql = "SELECT rating FROM restaurants;";
+    // sqlcon.db.query(sql,function(error,results){
+    //     if(error){
+    //         console.log(error);
+    //     }else {
+    //         rating=results[0].rating;
+    //         res.render("customers/rateRestaurant",{results:results,rating:rating});
+    //     }
+    // });
 });
 
 //update the details of a restaurant
 router.post("/update",function (req,res) {
+
     var name = req.body.name;
     var location = req.body.location;
     var phone = req.body.phone;
-
-    var ID=req.session.ownerID;
-    var userType=req.session.userType;
     var restaurantID=req.session.restaurant_id;
 
-    var sql = "UPDATE  restaurants SET name = \""+name+"\",location = \""+location+"\",phone = \""+phone+"\" WHERE ID=\""+restaurantID+"\";";
+    //list of updates
+    var updates={};
+    updates['/'+restaurantID+'/name']=name;
+    updates['/'+restaurantID+'/location']=location;
+    updates['/'+restaurantID+'/phone']=phone;
 
-    sqlcon.db.query(sql,function(error,results){
-        if(error){
-            console.log(error);
-        }else {
-            res.render("restaurant_owners");
-        }
-    });
+    fb.database.ref('/Restaurants').update(updates);
+    console.log("restaurant successfully updated")
+    res.render("restaurant_owners");
+
+    // var sql = "UPDATE  restaurants SET name = \""+name+"\",location = \""+location+"\",phone = \""+phone+"\" WHERE ID=\""+restaurantID+"\";";
+    //
+    // sqlcon.db.query(sql,function(error,results){
+    //     if(error){
+    //         console.log(error);
+    //     }else {
+    //         res.render("restaurant_owners");
+    //     }
+    // });
 });
 
 router.post("/:id/reserve",function (req,res) {
-    var ID = req.params.id;
+    var restaurantID = req.params.id;
+    var timeSlots;
     req.session.restaurant_id=req.params.id;
-    var sql1 = "SELECT * FROM restaurant_layout WHERE ID=\""+ID+"\";";
 
-    sqlcon.db.query(sql1, function(error, result){
-        if(error){
-            console.log(error);
-        } else{
-            console.log("res_session"+req.session.restaurant_id);
-            res.render("restaurants/results_ART", {results: result});
-        }
+    return fb.database.ref('/Restaurants/'+restaurantID).once('value').then(function (snapshot) {
+        console.log(snapshot.val());
+        res.render("customers/results_ART_Mongo",{results:snapshot});
     });
+
+    // var sql1 = "SELECT * FROM restaurant_layout WHERE ID=\""+ID+"\";";
+    // sqlcon.db.query(sql1, function(error, result){
+    //     if(error){
+    //         console.log(error);
+    //     } else{k
+    //         console.log("res_session"+req.session.restaurant_id);
+    //         res.render("restaurants/results_ART", {results: result});
+    //     }
+    // });
 });
 
 router.post("/:id/reserveTS", function(req, res, next) {
@@ -106,16 +159,33 @@ router.post("/:id/reserveTable",function (req,res) {
     var ID = req.session.restaurant_id;
     console.log(ID);
 
-    var sql1 = "SELECT * FROM restaurant_time_slot WHERE ID=\""+ID+"\";";
+    mongoose.connect(uri);
+    let db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
 
-    sqlcon.db.query(sql1, function(error, result){
-        if(error){
-            console.log(error);
-        } else{
-            req.session.RTS=result;
-            res.render("restaurants/results_ART", {results: result, time_slot: time_slot});
-        }
+    db.once('open', function () {
+
+        //cannot write model here as overwriteModelError comes/ therefore require global model externally
+        var user = require('./models/restaurant_time_slotModel');
+
+        user.findOne({email: email}, 'ID Available_time_slots', function (err, TimeSlots) {
+            console.log(timeSlots);
+            timeSlots=TimeSlots.Available_time_slots;
+            mongoose.connection.close();
+            res.render("restaurants/results_ART_Mongo",{timeSlots:timeSlots});
+        })
     });
+
+    // var sql1 = "SELECT * FROM restaurant_time_slot WHERE ID=\""+ID+"\";";
+    //
+    // sqlcon.db.query(sql1, function(error, result){
+    //     if(error){
+    //         console.log(error);
+    //     } else{
+    //         req.session.RTS=result;
+    //         res.render("restaurants/results_ART", {results: result, time_slot: time_slot});
+    //     }
+    // });
 });
 
 router.post("/:id/final_reserve", function(req, res, next) {

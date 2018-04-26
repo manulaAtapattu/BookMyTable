@@ -1,0 +1,42 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+   <% var restaurants=restaurants;
+   console.log(restaurants.val());%>
+
+    <h1>Search Results</h1>
+
+    <%for(var i=1;i<restaurants.numChildren()+1;i++){%>
+    <p>
+        Name : <%= restaurants.child(i).child("name").val()%>
+        Location : <%= restaurants.child(i).child("location").val()%>
+        Phone Number : <%= restaurants.child(i).child("phone").val()%>
+        Rating : <%= parseFloat(restaurants.child(i).child("rating").val()).toFixed(1)%>
+    </p>
+        <%
+        var restaurantID=i;
+%>
+        <% if (userType=="customers"){%>
+    <form action="/restaurants/<%= restaurantID %>/reserveTS" method="post">
+        <button type="submit" name="search" value="" class="btn btn-secondary">Reserve</button>
+    </form>
+    <form action="/restaurants/<%= restaurantID %>/rateRestaurant" method="post">
+        <button type="submit" name="search" value="" class="btn btn-secondary">Rate Restaurant</button>
+    </form>
+    <%}%>
+    <% if (userType=="restaurant_owners"){%>
+    <form action="/restaurant_owners/<%= restaurantID %>/addWaiter" method="post">
+        <button type="submit" name="search" value="" class="btn btn-secondary">Add waiter</button>
+    </form>
+    <form action="/restaurant_owners/<%= restaurantID %>/editRestaurant" method="post">
+        <button type="submit" name="search" value="" class="btn btn-secondary">Edit Restaurant Details</button>
+    </form>
+    <%}%>
+    </p>
+
+    <hr>
+<%}%>
+</div>
+<%include ../partials/footer.ejs%>

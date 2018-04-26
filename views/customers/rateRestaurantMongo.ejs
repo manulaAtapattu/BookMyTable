@@ -1,0 +1,38 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+    <h3>Restaurant Rating</h3>
+    <%
+    var rating = String(results.child("rating").val());
+    console.log("rating:"+rating);
+    var splitRating=rating.split(",");
+    var overallRating=splitRating[0];
+    var userNumber=splitRating[1]%>
+    <p>
+        Overall rating : <%= parseFloat(overallRating).toFixed(1);%><br>
+        Number of User Reviews : <%= userNumber%><br>
+    <form action="/customers/recordRating" method="post">
+        <div class="form-group">
+            <label>Select Rating</label>
+            <div class="dropdown">
+                <select name="rating" class="custom-select">
+                    <option class="dropdown-item" value="" disabled selected hidden>Select Rating</option>
+                    <option class="dropdown-item" value="1">1</option>
+                    <option class="dropdown-item" value="2">2</option>
+                    <option class="dropdown-item" value="3">3</option>
+                    <option class="dropdown-item" value="4">4</option>
+                    <option class="dropdown-item" value="5">5</option>
+                </select>
+            </div>
+        </div>
+        <input type="hidden" value="<%= userNumber%>" name="userNumber">
+        <input type="hidden" value="<%= overallRating%>" name="overallRating">
+
+        <button type="submit" class="btn btn-primary">Submit Rating</button>
+
+    </form>
+    </p>
+</div>
+
+<%include ../partials/footer.ejs%>

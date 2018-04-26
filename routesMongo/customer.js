@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
-var firebase = require("firebase");
 let uri = 'mongodb://mratapattu1996:Manula1234@ds115729.mlab.com:15729/bookmytable';
-var config = {
-    apiKey: "AIzaSyDW1svOcbk8gC2Mj1KI8DyWaOMmJo-jYOQ",
-    authDomain: "semester5project.firebaseapp.com",
-    databaseURL: "https://semester5project.firebaseio.com",
-    storageBucket: "semester5project.appspot.com",
-};
+
 
 var express = require('express');
 var router = express.Router();
-const sqlcon = require('./../config/database');
+const fb = require('./../config/firebase');
+
 
 
 router.get('/register', function(req, res, next) {
@@ -61,6 +56,7 @@ router.post("/", function(req, res){
 });
 
 router.post("/search",function (req,res) {
+
     mongoose.connect(uri);
     let db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
@@ -78,10 +74,8 @@ router.post("/search",function (req,res) {
 //     var restaurantNumber;
 //     var names;
 //     var locations;
-//
-//     firebase.initializeApp(config);
-//     var database = firebase.database();
-//     return database.ref('/Restaurants').once('value').then(function (snapshot) {
+
+//     return fb.database.ref('/Restaurants').once('value').then(function (snapshot) {
 //     console.log(snapshot.val());
 //     for(var i=1;i<snapshot.numChildren()+1;i++){
 //         console.log(snapshot.child(i).child("name").val());
@@ -144,11 +138,11 @@ router.post("/recordRating",function (req,res) {
     finalRating=newRating.toString()+","+userNumber .toString();
 
     //rating stored in firebase database
-    firebase.initializeApp(config);
-    var database = firebase.database()
     var updates={};
     updates['/'+restaurantID+'/rating']=finalRating;
-    return database.ref('/Restaurants').update(updates);
+    fb.database.ref('/Restaurants').update(updates);
+    console.log("rating successfully recorded")
+    res.render("customers");
 
     // var sql = "UPDATE restaurants SET rating = \""+finalRating+"\" WHERE ID="+restaurantID+";";
     //

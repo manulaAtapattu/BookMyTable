@@ -1,12 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const sqlcon = require('./../config/database');
 let uri = 'mongodb://mratapattu1996:Manula1234@ds115729.mlab.com:15729/bookmytable';
 
-//////
-
 const mongoose = require('mongoose');
-
 
 
 router.post("/loginValidation", function(req, res) {
@@ -29,7 +25,7 @@ router.post("/loginValidation", function(req, res) {
         var user = require('./models/'+userType+'Model.js');
 
         user.findOne({email: email}, 'ID firstName lastName email mobile PASSWORD', function (err, User) {
-            console.log(User.PASSWORD);
+            console.log(User);
             req.session.ownerID=User.ID;
             req.session.firstName=User.firstName;
             req.session.lastName=User.lastName;
@@ -70,9 +66,7 @@ router.post("/loginValidation", function(req, res) {
         });
         */
 
-
 ////////////////////////
-
 
     /* GET home page. */
     router.get('/', function (req, res, next) {
