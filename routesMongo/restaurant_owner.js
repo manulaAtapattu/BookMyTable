@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const sqlcon = require('./../config/database');
+const mongoose = require('mongoose');
+let uri = 'mongodb://mratapattu1996:Manula1234@ds115729.mlab.com:15729/bookmytable';
+const fb = require('./../config/firebase');
 
 
 /* GET home page. */
@@ -10,8 +13,9 @@ router.get('/register', function(req, res, next) {
 router.get('/', function(req, res, next) {
     res.render('restaurant_owners/index', { title: 'Express' });
 });
-
+//not used???
 router.post("/", function(req, res){
+
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var email = req.body.email;
@@ -35,15 +39,20 @@ router.post("/:id/editRestaurant",function (req,res) {
     var restaurantID=req.params.id;
     req.session.restaurant_id=restaurantID;
 
-    var sql = "SELECT * FROM restaurants WHERE ID=\""+restaurantID+"\";";
+    return fb.database.ref('/Restaurants/'+restaurantID).once('value').then(function (snapshot) {
+    console.log(snapshot.val());
+    res.render("restaurants/edit",{restaurants:snapshot});
+});
 
-    sqlcon.db.query(sql,function(error,results){
-        if(error){
-            console.log(error);
-        }else {
-            res.render("restaurants/edit",{results:results});
-        }
-    });
+    // var sql = "SELECT * FROM restaurants WHERE ID=\""+restaurantID+"\";";
+    //
+    // sqlcon.db.query(sql,function(error,results){
+    //     if(error){
+    //         console.log(error);
+    //     }else {
+    //         res.render("restaurants/edit",{results:results});
+    //     }
+    // });
 });
 
 router.post("/:id/addWaiter", function(req, res, next) {
@@ -52,41 +61,65 @@ router.post("/:id/addWaiter", function(req, res, next) {
 });
 
 router.post("/registerW", function(req, res){
+
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var email = req.body.email;
     var mobile=req.body.mobile;
+    var password="BookMyTable";
+    var restaurants="";
+    var waiterNo;
+    var waiterID;
 
-
-    var sql = "INSERT INTO waiters(firstName, lastName, email,mobile,PASSWORD,restaurantList) " +
-        "VALUES(\"" + firstName + "\", \"" + lastName + "\", \"" + email + "\",\""+mobile+"\",\""+"bookyMyTable123"+"\",\""+""+"\");";
-
-    sqlcon.db.query(sql, function(error, result){
-        if(error){
-            console.log(error);
-        } else{
-            console.log("Added waiter to the database");
-        }
-        res.redirect("/restaurant_owners");
+    fb.database.ref('Waiters').once('value').then(function (snapshot) {
+        waiterNo=snapshot.numChildren();
+        waiterID=parseInt(waiterNo)+1;
+        database.ref('Waiters/'+waiterID).set({
+            email: email,
+            firstName: firstName,
+            lastName : lastName,
+            mobile:mobile,
+            password:password,
+            restaurants:restaurants
+        });
+        console.log("Added waiter to the database");
     });
+    res.redirect("/restaurant_owners");
+
+    // var sql = "INSERT INTO waiters(firstName, lastName, email,mobile,PASSWORD,restaurantList) " +
+    //     "VALUES(\"" + firstName + "\", \"" + lastName + "\", \"" + email + "\",\""+mobile+"\",\""+"bookyMyTable123"+"\",\""+""+"\");";
+    //
+    // sqlcon.db.query(sql, function(error, result){
+    //     if(error){
+    //         console.log(error);
+    //     } else{
+    //         console.log("Added waiter to the database");
+    //     }
+    //     res.redirect("/restaurant_owners");
+    // });
 });
 
 
 router.post("/search",function (req,res) {
     var ownerID=req.session.ownerID;
-    var userType=req.session.userType;
     console.log("OwnerID: "+ownerID);
-    var sql = "SELECT * FROM restaurants WHERE owner_ID=\""+ownerID+"\";";
 
-    sqlcon.db.query(sql,function(error,results){
-        if(error){
-            console.log(error);
-        }else {
-            res.render("restaurants/results",{results:results,userType:userType});
-        }
+    return fb.database.ref('/Restaurants').once('value').then(function (snapshot) {
+        console.log(snapshot.val());
+        res.render("restaurants/resultsNew",{restaurants:snapshot});
     });
+    // var sql = "SELECT * FROM restaurants WHERE owner_ID=\""+ownerID+"\";";
+    //
+    // sqlcon.db.query(sql,function(error,results){
+    //     if(error){
+    //         console.log(error);
+    //     }else {
+    //         res.render("restaurants/results",{results:results,userType:userType});
+    //     }
+    // });
 });
 
+//no need?
 router.post("/loginValidation", function(req, res){
     var userType = req.body.userType;
     var firstName = req.body.firstName;

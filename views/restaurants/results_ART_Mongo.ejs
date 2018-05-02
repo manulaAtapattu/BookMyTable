@@ -6,7 +6,7 @@
     <h2>Search Results</h2>
 
     <%
-    var ATS = results[0].Available_time_slots;
+    var ATS = results.AvailableTimeSlots;
     var ATS2 = ATS.split("/");
     var  required_ATS = ATS2[parseInt(time_slot)-1];
     var required_ATS2 = required_ATS.split(",");

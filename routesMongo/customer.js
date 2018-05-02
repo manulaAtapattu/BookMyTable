@@ -42,6 +42,8 @@ router.post("/", function(req, res){
         });
     });
 
+
+
     // var sql = "INSERT INTO customers(firstName, lastName, email,mobile) " +
     //     "VALUES(\"" + firstName + "\", \"" + lastName + "\", \"" + email + "\",\""+mobile+"\");";
     //
@@ -55,6 +57,43 @@ router.post("/", function(req, res){
     // });
 });
 
+router.post("/customerRegistration", function(req, res){
+    mongoose.connect(uri);
+    let db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var mobile=req.body.mobile;
+    var Max;
+    var User = require('./models/customersModel.js');
+
+    db.once('open',function () {
+        User.findOne().sort('-ID').exec(function (err,max) {
+            Max=parseInt(max.ID)+1;
+            console.log("MaxID="+Max);
+            var newCustomer= new User({ID:Max,firstName:firstName,lastName:lastName,email:email,mobile:mobile,PASSWORD:"bookmytable"});
+            newCustomer.save(function (err, newCustomer) {
+                if (err) return console.error(err);
+                console.log("new customer - "+newCustomer+" successfully added");
+            });
+            res.redirect("/");
+        });
+    });
+
+    // var sql = "INSERT INTO restaurant_owners(firstName, lastName, email,mobile,PASSWORD) " +
+    //     "VALUES(\"" + firstName + "\", \"" + lastName + "\", \"" + email + "\",\""+mobile+"\",\""+"bookyMyTable123"+"\");";
+    //
+    // sqlcon.db.query(sql, function(error, result){
+    //     if(error){
+    //         console.log(error);
+    //     } else{
+    //         console.log("Added Restaurant Owner to the database");
+    //     }
+    //     res.redirect("/admin");
+    // });
+});
 router.post("/search",function (req,res) {
 
     mongoose.connect(uri);
@@ -163,12 +202,14 @@ router.post("/reservations_made",function (req,res){
     let db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    var ID = req.params.id;
+    var ID = req.session.ownerID;
+    console.log("ID: "+ID);
     var User = require('./models/customersModel.js');
 
     db.once('open',function () {
         User.findOne({ID:ID},function (err, user) {
             if (err) return console.error(err);
+            console.log(user);
             res.render("customers/reservations_madeMongo",{reservations:user.reservation});
         });
     });

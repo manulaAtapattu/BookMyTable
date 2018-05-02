@@ -1,0 +1,33 @@
+<% include ../partials/header.ejs %>
+
+<button style="float: right;"><a href="/signUp" id="signIn"  class="btn btn-primary">Customer Sign Up</a></button><br><br>
+
+<h1 class="card-header">Customer Registration</h1>
+
+<div class="container">
+
+    <form action="/customers/customerRegistration" method="post">
+
+        <div class="form-group">
+            <label>First Name</label>
+            <input name="firstName" type="text" class="form-control" placeholder="Enter Email">
+        </div>
+        <div class="form-group">
+            <label>Last Name</label>
+            <input name="lastName" type="text" class="form-control" placeholder="Enter Email">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input name="email" type="text" class="form-control" placeholder="Enter Email">
+        </div>
+        <div class="form-group">
+            <label>Mobile</label>
+            <input name="mobile" type="text" class="form-control" placeholder="Enter Email">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+
+</div>
+
+<% include ../partials/footer.ejs %>

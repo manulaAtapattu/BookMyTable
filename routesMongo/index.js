@@ -23,8 +23,7 @@ router.post("/loginValidation", function(req, res) {
 
         //cannot write model here as overwriteModelError comes/ therefore require global model externally
         var user = require('./models/'+userType+'Model.js');
-
-        user.findOne({email: email}, 'ID firstName lastName email mobile PASSWORD', function (err, User) {
+        user.findOne({email: email}, function (err, User) {
             console.log(User);
             req.session.ownerID=User.ID;
             req.session.firstName=User.firstName;
@@ -32,7 +31,10 @@ router.post("/loginValidation", function(req, res) {
             req.session.email=User.email;
             req.session.mobile=User.mobile;
             req.session.PASSWORD=User.PASSWORD;
-
+            if(userType=='customers'){
+                console.log("hereee");
+                req.session.reservations=User.reservation;
+            }
 
             mongoose.connection.close();
             if (User.PASSWORD==ps){
@@ -71,6 +73,10 @@ router.post("/loginValidation", function(req, res) {
     /* GET home page. */
     router.get('/', function (req, res, next) {
         res.render('Common/login', {title: 'Express'});
+    });
+
+    router.get('/signUp', function (req, res, next){
+        res.render('Common/signUp', {title:'Express'});
     });
 
     router.post("/editProfile", function (req, res) {
@@ -121,7 +127,6 @@ router.post("/loginValidation", function(req, res) {
                 user.save(function (err,updatedUser) {
                     if(err) return console.log("error: "+err);
                     // res.send(updatedUser);
-
                     //update session fields
                     req.session.firstName=firstName;
                     req.session.lastName=lastName;
