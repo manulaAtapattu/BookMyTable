@@ -1,0 +1,29 @@
+<%include ../partials/header.ejs%>
+
+<div class="container">
+    <h1 id="h1">Book My Table</h1><br>
+
+    <% var reservations=reservations;
+    var array1=reservations.split('/');
+
+    <h1>Search Results</h1>
+
+    <%for(var i=1;i<array1.length;i++){
+    var str1=array1[i]
+    var array2=str1.split(",")%>
+    <p>
+        CustomerID : <%= array2[0]%>
+        Time : <%= array2[1]%>
+        Table Number : <%= array2[2]%>
+    </p>
+    <%
+        var restaurantID=i;
+    %>
+    <form action="/reservation_manager/<%= i%>/cancelReservation" method="post">
+        <button type="submit" name="cancelReservation" value="" class="btn btn-secondary">Cancel Reservation</button>
+    </form>
+
+    <hr>
+    <%}%>
+</div>
+<%include ../partials/footer.ejs%>

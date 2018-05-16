@@ -8,6 +8,7 @@ router.get('/', function(req, res, next) {
   res.render('Common/login', { title: 'Express' });
 });
 
+
 router.post("/editProfile",function (req,res) {
     var ID=req.session.ownerID;
     var userType=req.session.userType;
@@ -61,6 +62,7 @@ router.post("/loginValidation", function(req, res){
         if(userType=='customers'){
            req.session.reservations=result[0].reservation;
         }
+
         if(error){
             console.log(error);
         } else if((result[0].PASSWORD)== ps ){

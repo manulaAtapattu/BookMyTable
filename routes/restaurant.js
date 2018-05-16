@@ -119,6 +119,7 @@ router.post("/:id/reserveTable",function (req,res) {
 });
 
 router.post("/:id/final_reserve", function(req, res, next) {
+
     var room_table = req.params.id;
     req.session.RT=room_table;
     var RTS=req.session.RTS;

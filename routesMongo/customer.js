@@ -16,6 +16,7 @@ router.get('/', function(req, res, next) {
     res.render('customers/index', { title: 'Express' });
 });
 
+// do i need this
 router.post("/", function(req, res){
 
     mongoose.connect(uri);
@@ -38,6 +39,7 @@ router.post("/", function(req, res){
                 if (err) return console.error(err);
                 console.log("new customer - "+newCustomer+" successfully added");
             });
+            req.flash('info','Customer added successfully');
             res.redirect("/");
         });
     });
@@ -78,6 +80,7 @@ router.post("/customerRegistration", function(req, res){
                 if (err) return console.error(err);
                 console.log("new customer - "+newCustomer+" successfully added");
             });
+            req.flash('info','Customer added successfully');
             res.redirect("/");
         });
     });
@@ -147,6 +150,7 @@ router.post("/:id/remove",function (req,res) {
         User.remove({ID:ID},function (err, users) {
             if (err) return console.error(err);
             console.log("Customer removed from database");
+            req.flash('info','Customer removed successfully');
             res.redirect("/admin");
         });
     });
@@ -181,6 +185,7 @@ router.post("/recordRating",function (req,res) {
     updates['/'+restaurantID+'/rating']=finalRating;
     fb.database.ref('/Restaurants').update(updates);
     console.log("rating successfully recorded")
+    req.flash('info','rating recorded successfully');
     res.render("customers");
 
     // var sql = "UPDATE restaurants SET rating = \""+finalRating+"\" WHERE ID="+restaurantID+";";

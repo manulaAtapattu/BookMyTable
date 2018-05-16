@@ -6,23 +6,23 @@
     <form action="/restaurants/register" method="POST">
         <div class=" form-group">
             <label for name>Restaurant Name</label>
-            <input name="name" type="text" class="form-control" placeholder="Enter Restaurant Name">
+            <input name="name" type="text" class="form-control" placeholder="Enter Restaurant Name" required>
         </div>
         <div class=" form-group">
             <label for location>Location</label>
-            <input name="location" type="text" class="form-control" placeholder="Enter Restaurant Location">
+            <input name="location" type="text" class="form-control" placeholder="Enter Restaurant Location" required>
         </div>
         <div class=" form-group">
             <label for phone>Phone Number</label>
-            <input name="phone" type="text" class="form-control" placeholder="Enter Phone Number">
+            <input name="phone" type="number" class="form-control" placeholder="Enter Phone Number" required>
         </div>
         <div class=" form-group">
             <label for roomTable>Table Structure</label>
-            <input name="phone" type="text" class="form-control" placeholder=" eg:- A1,A2,A3,B1( 'A'-room name '1'-table number">
+            <input name="phone" type="text" class="form-control" placeholder=" eg:- A1,A2,A3,B1( 'A'-room name '1'-table number" required>
         </div>
         <div class=" form-group">
             <label for phone>table Sizes</label>
-            <input name="tableSize" type="text" class="form-control" placeholder="eg:- 2,2,8 (according to above Table Structure)">
+            <input name="tableSize" type="text" class="form-control" placeholder="eg:- 2,2,8 (according to above Table Structure)" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

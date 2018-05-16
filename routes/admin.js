@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const sqlcon = require('./../config/database');
+const sqlcon = require('./../config/validate');
 
 
 /* GET home page. */

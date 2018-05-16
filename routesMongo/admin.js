@@ -47,6 +47,7 @@ router.post("/registerAdmin", function(req, res){
                 if (err) return console.error(err);
                 console.log("new Admin - "+newAdmin+" successfully added");
             });
+            req.flash('info','Admin added successfully');
             res.redirect("/admin");
         });
     });
@@ -83,8 +84,9 @@ router.post("/registerRO", function(req, res){
             var newRO= new User({ID:Max,firstName:firstName,lastName:lastName,email:email,mobile:mobile,PASSWORD:"bookmytable"});
             newRO.save(function (err, newRO) {
                 if (err) return console.error(err);
-                console.log("new Admin - "+newRO+" successfully added");
+                console.log("new Restaurant Owner - "+newRO+" successfully added");
             });
+            req.flash('info','New restaurant owner added successfully');
             res.redirect("/admin");
         });
     });

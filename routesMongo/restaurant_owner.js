@@ -83,6 +83,8 @@ router.post("/registerW", function(req, res){
             restaurants:restaurants
         });
         console.log("Added waiter to the database");
+        req.flash('info','Added waiter to the database');
+
     });
     res.redirect("/restaurant_owners");
 

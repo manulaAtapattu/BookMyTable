@@ -25,25 +25,36 @@ router.post("/loginValidation", function(req, res) {
         var user = require('./models/'+userType+'Model.js');
         user.findOne({email: email}, function (err, User) {
             console.log(User);
-            req.session.ownerID=User.ID;
-            req.session.firstName=User.firstName;
-            req.session.lastName=User.lastName;
-            req.session.email=User.email;
-            req.session.mobile=User.mobile;
-            req.session.PASSWORD=User.PASSWORD;
-            if(userType=='customers'){
-                console.log("hereee");
-                req.session.reservations=User.reservation;
+            if (User==null){
+                console.log("email incorrect");
+                req.flash('error','Incorrect Email Address entered');
+                res.render('Common/login', {title: 'Express'});
+            }else{
+                req.session.ownerID=User.ID;
+                req.session.firstName=User.firstName;
+                req.session.lastName=User.lastName;
+                req.session.email=User.email;
+                req.session.mobile=User.mobile;
+                req.session.PASSWORD=User.PASSWORD;
+                if(userType=='customers'){
+                    console.log("hereee");
+                    req.session.reservations=User.reservation;
+                }
+                if(userType=="reservation_manager"){
+                    req.session.restaurant_id=User.restaurant;
+                }
+                mongoose.connection.close();
+                if (User.PASSWORD==ps){
+                    console.log("Password is correct");
+                    req.flash('success','Successfully logged in');
+                    res.redirect("/" + userType);
+                }else{
+                    console.log("Password is incorrect");
+                    req.flash('error','Password is incorrect');
+                    res.render('Common/login', {title: 'Express'});
+                }
             }
 
-            mongoose.connection.close();
-            if (User.PASSWORD==ps){
-                console.log("Password is correct");
-                res.redirect("/" + userType);
-            }else{
-                console.log("Password is incorrect");
-                 res.render('Common/login', {title: 'Express'});
-            }
         })
     });
 });
@@ -134,6 +145,8 @@ router.post("/loginValidation", function(req, res) {
                     req.session.mobile=mobile;
                     req.session.PASSWORD=password;
                     console.log("profile successfully updated")
+                    req.flash('info','profile successfully updated');
+
                 });
             });
 

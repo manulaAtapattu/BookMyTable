@@ -58,10 +58,10 @@ router.post("/search",function (req,res) {
 
 
     var userType=req.session.userType;
+    var restaurantID= req.session.restaurant_id;
 
-    return fb.database.ref('/Restaurants').once('value').then(function (snapshot) {
-    console.log(snapshot.val());
-    res.render("restaurants/resultsNew",{restaurants:snapshot,userType:userType});
+    fb.database.ref('/Restaurants'+restaurantID).once('value').then(function (snapshot) {
+    res.render("restaurants/restaurantReservations",{reservations:snapshot});
 });
 
     // var sql = "SELECT * FROM restaurants;";
@@ -114,6 +114,7 @@ router.post("/update",function (req,res) {
 
     fb.database.ref('/Restaurants').update(updates);
     console.log("restaurant successfully updated")
+    req.flash('info','restaurant successfully updated');
     res.render("restaurant_owners");
 
     // var sql = "UPDATE  restaurants SET name = \""+name+"\",location = \""+location+"\",phone = \""+phone+"\" WHERE ID=\""+restaurantID+"\";";
@@ -202,9 +203,6 @@ router.post("/:id/final_reserve", function(req, res) {
     console.log("RTS: "+RTS.AvailableTimeSlots);
     var TS = req.session.time_slot;
     var ID = req.session.restaurant_id; //to update reservations_made.ejs in customers
-    var flag1=false;
-    var flag2=false;
-    var flag3=false;
 
     //remove table from available
     var ATS = RTS.AvailableTimeSlots;
@@ -230,7 +228,7 @@ router.post("/:id/final_reserve", function(req, res) {
                 if (err) return console.log("error: " + err);
                 // res.send(updatedUser);
                 console.log("timeSlot successfully updated");
-                flag1=true;
+
             });
         });
     });
@@ -259,7 +257,6 @@ router.post("/:id/final_reserve", function(req, res) {
                 if(err) return console.log("error: "+err);
                 // res.send(updatedUser);
                 console.log("updated reserved");
-                flag2=true;
             });
         });
     });
@@ -283,10 +280,23 @@ router.post("/:id/final_reserve", function(req, res) {
                                         if(err) return console.log("error: "+err);
                                         // res.send(updatedUser);
                                         console.log("updated successfully")
-                                        flag3=true;
                                     });
                                 });
     });
+
+                            var reservations;
+                            //update reservations in restaurants
+                            fb.database.ref('/Restaurants/'+ID).once('value').then(function (snapshot) {
+                                reservations = snapshot.reservations;
+                                if (reservations==undefined){reservations=req.session.ownerID+","+TS+","+room_table;}else{reservations=reservations+"/"+req.session.ownerID+","+TS+","+room_table;}
+                                console.log("Reservations in restaurant: "+reservations);
+                                var updates={};
+                                updates['/'+ID+'/reservations']=reservations;
+                                fb.database.ref('/Restaurants').update(updates);
+                            });
+
+
+                             req.flash('info','Reservation updated');
                             setTimeout(function(){res.render("customers", { title: 'Express' });},3000);
                             // while (true){
                             //     if (flag1==true){
@@ -310,7 +320,6 @@ router.post("/:id/final_reserve", function(req, res) {
     // });
 
 
-
     // var sql2 = "UPDATE restaurant_time_slot SET Reserved_time_slots = \""+join4+"\" WHERE ID="+ID+";";
     //
     // sqlcon.db.query(sql2, function(error, result){
@@ -321,7 +330,6 @@ router.post("/:id/final_reserve", function(req, res) {
     //         console.log("updated Reserved")
     //     }
     // });
-
 
 
     // var sql4 = "UPDATE customers SET reservation= \""+RM3+"\" WHERE email=\""+email+"\";";

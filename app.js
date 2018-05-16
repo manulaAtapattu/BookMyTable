@@ -9,6 +9,8 @@ var methodOverride  = require("method-override");
 // var mysql           = require("mysql");
 const sqlcon = require('./config/database');
 // const mongo = require('./config/mongodb');
+const expressValidator=require('express-validator');
+const flash = require('connect-flash');
 
 
 var index = require('./routesMongo/index');
@@ -17,7 +19,7 @@ var customer=require('./routesMongo/customer');
 var restaurant=require('./routesMongo/restaurant');
 var admin=require('./routesMongo/admin');
 var restaurant_owner=require('./routesMongo/restaurant_owner');
-
+var reservation_manager=require('./routesMongo/reservation_manager');
 
 var app = express();
 
@@ -118,10 +120,42 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({secret: 'codemaveriks'}));
+// app.use(session({secret: 'codemaveriks'}));
 app.use(methodOverride("_method"));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Express Session Middleware
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true,
+}));
+
+// Express Messages Middleware
+app.use(require('connect-flash')());
+app.use(function (req, res, next){
+    res.locals.messages = require('express-messages')(req, res);
+    next();
+});
+
+//Express Validator Middleware
+app.use(expressValidator({
+    errorFormatter: function (param, msg, value) {
+        var namespace=param.split('.')
+            ,root=namespace.shift()
+            ,formParam=root;
+
+        while(namespace.length){
+            formParam += '[' + namespace.shift() + ']';
+        }
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        };
+    }
+}));
 
 //Routes
 app.use('/', index);
@@ -130,7 +164,7 @@ app.use('/customers', customer);
 app.use('/admin', admin);
 app.use('/restaurants', restaurant);
 app.use('/restaurant_owners', restaurant_owner);
-
+app.use('/reservation_managers', reservation_manager);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
